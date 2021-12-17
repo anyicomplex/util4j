@@ -4,13 +4,13 @@ plugins {
 }
 
 ext {
-    groupId = 'com.anyicomplex'
+    group = 'com.anyicomplex'
     artifactId = 'util4j'
-    versionName = '1.0.0'
+    version = '1.0.0'
 }
 
-group groupId
-version versionName
+group group
+version version
 
 repositories {
     mavenCentral()
