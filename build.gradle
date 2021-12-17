@@ -1,16 +1,33 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-apply plugin: 'maven-publish'
+ext {
+    groupId = 'com.anyicomplex'
+    artifactId = 'util4j'
+    versionName = '1.0.0'
+}
 
-group 'com.anyicomplex'
-version '1.0.0'
+group groupId
+version versionName
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
+}
 
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = groupId
+            artifactId = artifactId
+            version = versionName
+
+            from components.java
+        }
+    }
 }
