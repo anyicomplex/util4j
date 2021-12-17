@@ -23,11 +23,7 @@ dependencies {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            group(groupId)
-            version(versionName)
             artifactId = artifactId
-
-            from components.java
         }
     }
 }
