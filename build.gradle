@@ -6,7 +6,7 @@ plugins {
 ext {
     group = 'com.anyicomplex'
     artifactId = 'util4j'
-    version = '1.0.0'
+    version = '1.0.1'
 }
 
 group group
