@@ -1,4 +1,6 @@
 # util4j-desktop
+[![Java CI with Gradle](https://github.com/anyicomplex/util4j-desktop/actions/workflows/gradle.yml/badge.svg)](https://github.com/anyicomplex/util4j-desktop/actions/workflows/gradle.yml)
+
 Personal utility library for Java.
 
 ### To get a Git project into your build:
