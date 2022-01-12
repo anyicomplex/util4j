@@ -1,4 +1,4 @@
-# util4j
+# util4j-desktop
 Personal utility library for Java.
 
 ### To get a Git project into your build:
