@@ -30,8 +30,13 @@ import org.junit.jupiter.api.Test;
 public class GeneralTest {
 
     @Test
-    public void OSValidator() {
-        OSValidatorTest.main(null);
+    public void SystemInfo() {
+        SystemInfoTest.main(null);
+    }
+
+    @Test
+    public void SystemPath() {
+        SystemPathTest.main(null);
     }
 
     @Test

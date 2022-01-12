@@ -25,12 +25,16 @@
 
 package com.anyicomplex.desktop.test;
 
-import com.anyicomplex.desktop.util.OSValidator;
+import com.anyicomplex.desktop.util.SystemPath;
 
-public class OSValidatorTest {
+public class SystemPathTest {
 
     public static void main(String[] args) {
-        System.out.println("Current OS: " + OSValidator.getOSType().name());
+        System.out.println("User home: " + SystemPath.userHome());
+        System.out.println("User data home: " + SystemPath.userData());
+        System.out.println("User config home: " + SystemPath.userConfig());
+        System.out.println("User cache home: " + SystemPath.userCache());
+        System.out.println("System tmp dir: " + SystemPath.temporary());
     }
 
 }

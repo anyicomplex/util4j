@@ -71,13 +71,13 @@ public final class OpenLinkInBrowser {
     public static void fromURL(URL url) {
         if (url == null) throw new NullPointerException("Unable to open link: \nUrl cannot be null.");
         String baseCommand;
-        switch (OSValidator.getOSType()) {
+        switch (SystemInfo.getSystemType()) {
             case WINDOWS:
                 baseCommand = "start";
                 break;
             case LINUX:
-            case AIX:
             case SOLARIS:
+            case AIX:
             case OTHER_UNIX:
                 baseCommand = "xdg-open";
                 break;
