@@ -23,26 +23,44 @@
  *
  */
 
-package com.anyicomplex.util4j;
+package com.anyicomplex.desktop.util;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 
 /**
- * Simple utility class that opens url using system's default browser.
+ * Simple utility class that opens url using system's default browser. Does not depend on {@link java.awt.Desktop}.
  */
-public class OpenURL {
+public final class OpenLinkInBrowser {
+
+    private OpenLinkInBrowser(){}
 
     /**
      * Opens url using system's default browser depends on url string.
+     * @see OpenLinkInBrowser#fromURL(URL)
      * @param url url string
      */
     public static void fromString(String url) {
         try {
-            from(new URL(url));
+            fromURL(new URL(url));
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            System.err.println("Unable to open link: \n" + e.getMessage());
+        }
+    }
+
+    /**
+     * Opens url using system's default browser depends on uri object.
+     * @see OpenLinkInBrowser#fromURL(URL)
+     * @param uri uri object
+     */
+    public static void fromURI(URI uri) {
+        if (uri == null) throw new NullPointerException("Unable to open link: \nUri cannot be null.");
+        try {
+            fromURL(uri.toURL());
+        } catch (MalformedURLException e) {
+            System.err.println("Unable to open link: \n" + e.getMessage());
         }
     }
 
@@ -50,26 +68,29 @@ public class OpenURL {
      * Opens url using system's default browser depends on url object.
      * @param url url object
      */
-    public static void from(URL url) {
-        if (url == null) throw new NullPointerException("Url cannot be null.");
+    public static void fromURL(URL url) {
+        if (url == null) throw new NullPointerException("Unable to open link: \nUrl cannot be null.");
         String baseCommand;
         switch (OSValidator.getOSType()) {
             case WINDOWS:
                 baseCommand = "start";
                 break;
             case LINUX:
+            case AIX:
+            case SOLARIS:
+            case OTHER_UNIX:
                 baseCommand = "xdg-open";
                 break;
             case MAC:
                 baseCommand = "open";
                 break;
             default:
-                throw new IllegalStateException("Unsupported platform.");
+                throw new IllegalStateException("Unable to open link: \nUnsupported platform.");
         }
         try {
             Runtime.getRuntime().exec(baseCommand + " " + url);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Unable to open link: \n" + e.getMessage());
         }
     }
 

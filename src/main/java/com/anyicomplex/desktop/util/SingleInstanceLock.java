@@ -23,7 +23,7 @@
  *
  */
 
-package com.anyicomplex.util4j;
+package com.anyicomplex.desktop.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,16 +33,18 @@ import java.nio.channels.FileLock;
 /**
  * Simple utility class that prevents user from running more than one instances of the same application. File-based.
  */
-public class SingleInstanceLock {
+public final class SingleInstanceLock {
+
+    private SingleInstanceLock(){}
 
     /**
      * Exit if other current application's instances running, depends on lock file with appId.
      *
      * @param appId application id, can be any words, cannot be null.
-     * @param exitCode exit code, will be call by {@link System}.exit(int status);
+     * @param exitCode exit code, will be call by {@link System#exit(int)}.
      */
     public static synchronized void exitIfOtherInstancesRunning (String appId, int exitCode) {
-        if (appId == null) throw new NullPointerException("AppId cannot be null.");
+        if (appId == null) throw new NullPointerException("Unable to create lock: \nappId cannot be null.");
         String tmpDir = System.getProperty("java.io.tmpdir");
         String userName = System.getProperty("user.name");
         final File file = new File(tmpDir, appId + "." + userName + ".lock");
@@ -74,6 +76,7 @@ public class SingleInstanceLock {
 
     /**
      * Exit with code 0 if other current application's instances running, depends on lock file with appId.
+     * @see SingleInstanceLock#exitIfOtherInstancesRunning(String, int)
      *
      * @param appId application id, can be any words, cannot be null.
      */

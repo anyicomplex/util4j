@@ -23,15 +23,17 @@
  *
  */
 
-package com.anyicomplex.util4j;
+package com.anyicomplex.desktop.util;
 
 /**
- * Simple utility class that validates system type.
+ * Simple utility class that validates operating system type.
  */
-public class OSValidator {
+public final class OSValidator {
+
+    private OSValidator(){}
 
     /**
-     * System types
+     * Operating System types
      */
     public enum OSType {
         WINDOWS,
@@ -105,7 +107,7 @@ public class OSValidator {
     }
 
     /**
-     * Validates whether system is Unix.
+     * Validates whether system is Unix.<br>
      * Note: Mac is Unix, Linux Is Not UniX.
      * @return whether system is Unix
      */
