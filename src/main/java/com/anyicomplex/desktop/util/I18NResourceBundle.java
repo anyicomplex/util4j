@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Simple utility class that reads I18N texts from resources files. Default locale is {@link Locale#getDefault()}, basename is "Messages".
+ * Simple utility class that reads I18N texts from resources files. Default locale is {@link Locale#getDefault()}, baseName is "Messages".
  */
 public final class I18NResourceBundle {
 
@@ -38,7 +38,7 @@ public final class I18NResourceBundle {
     public static final String DEFAULT_BASENAME = "Messages";
 
     private volatile static Locale locale = Locale.getDefault();
-    private volatile static String basename = DEFAULT_BASENAME;
+    private volatile static String baseName = DEFAULT_BASENAME;
 
     /**
      * Returns {@link I18NResourceBundle#locale}.
@@ -60,43 +60,43 @@ public final class I18NResourceBundle {
     }
 
     /**
-     * Returns {@link I18NResourceBundle#basename}.
+     * Returns {@link I18NResourceBundle#baseName}.
      *
-     * @return current basename
+     * @return current baseName
      */
-    public static String getBasename() {
-        return basename;
+    public static String getBaseName() {
+        return baseName;
     }
 
     /**
-     * Sets {@link I18NResourceBundle#basename}. It will be used by {@link I18NResourceBundle#getText(Locale, String)}.
+     * Sets {@link I18NResourceBundle#baseName}. It will be used by {@link I18NResourceBundle#getText(Locale, String)}.
      *
-     * @param basename basename will be set
+     * @param baseName baseName will be set
      */
-    public static void setBasename(String basename) {
-        if (basename == null) throw new NullPointerException("Cannot get text: \nBasename cannot be null.");
-        if (basename.length() < 1) throw new IllegalArgumentException("Cannot get text: \nInvalid basename.");
-        I18NResourceBundle.basename = basename;
+    public static void setBaseName(String baseName) {
+        if (baseName == null) throw new NullPointerException("Unable to get text: \nBaseName cannot be null.");
+        if (baseName.length() < 1) throw new IllegalArgumentException("Unable to get text: \nInvalid baseName.");
+        I18NResourceBundle.baseName = baseName;
     }
 
     /**
-     * Returns text string by key depends on specific basename and locale.
+     * Returns text string by key depends on specific baseName and locale.
      *
-     * @param basename basename
+     * @param baseName baseName
      * @param locale specific locale
      * @param key specific key
      * @return text string value
      */
-    public static String getText(String basename, Locale locale, String key) {
-        if (basename == null) throw new NullPointerException("Cannot get text: \nBasename cannot be null.");
-        if (locale == null) throw new NullPointerException("Cannot get text: \nLocale cannot be null.");
-        if (key == null) throw new NullPointerException("Cannot get text: \nKey cannot be null.");
-        if (key.length() < 1) throw new IllegalArgumentException("Cannot get text: \nInvalid key.");
-        return ResourceBundle.getBundle(basename, locale).getString(key);
+    public static String getText(String baseName, Locale locale, String key) {
+        if (baseName == null) throw new NullPointerException("Unable to get text: \nBaseName cannot be null.");
+        if (locale == null) throw new NullPointerException("Unable to get text: \nLocale cannot be null.");
+        if (key == null) throw new NullPointerException("Unable to get text: \nKey cannot be null.");
+        if (key.length() < 1) throw new IllegalArgumentException("Unable to get text: \nInvalid key.");
+        return ResourceBundle.getBundle(baseName, locale).getString(key);
     }
 
     /**
-     * Returns text string by key depends on {@link I18NResourceBundle#basename} and specific locale.
+     * Returns text string by key depends on {@link I18NResourceBundle#baseName} and specific locale.
      * @see I18NResourceBundle#getText(String, Locale, String)
      *
      * @param locale specific locale
@@ -104,11 +104,11 @@ public final class I18NResourceBundle {
      * @return text string value
      */
     public static String getText(Locale locale, String key) {
-        return getText(getBasename(), locale, key);
+        return getText(getBaseName(), locale, key);
     }
 
     /**
-     * Returns text string by key depends on {@link I18NResourceBundle#basename} and {@link I18NResourceBundle#locale}.
+     * Returns text string by key depends on {@link I18NResourceBundle#baseName} and {@link I18NResourceBundle#locale}.
      * @see I18NResourceBundle#getText(Locale, String)
      *
      * @param key specific key

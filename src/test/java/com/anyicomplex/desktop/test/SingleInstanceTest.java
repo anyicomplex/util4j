@@ -25,33 +25,28 @@
 
 package com.anyicomplex.desktop.test;
 
-import org.junit.jupiter.api.Test;
+import com.anyicomplex.desktop.util.MessageDigestHelper;
+import com.anyicomplex.desktop.util.SingleInstanceLock;
+import com.anyicomplex.desktop.util.SystemPath;
 
-public class GeneralTest {
+import java.io.File;
 
-    @Test
-    public void PathHelper() {
-        PathHelperTest.main(null);
-    }
+public class SingleInstanceTest {
 
-    @Test
-    public void SystemInfo() {
-        SystemInfoTest.main(null);
-    }
-
-    @Test
-    public void SystemPath() {
-        SystemPathTest.main(null);
-    }
-
-    @Test
-    public void OpenLinkInBrowser() {
-        OpenLinkInBrowserTest.main(null);
-    }
-
-    @Test
-    public void SingleInstance() {
-        SingleInstanceTest.main(null);
+    public static void main(String[] args) {
+        String appId = SingleInstanceTest.class.getCanonicalName();
+        String userName = System.getProperty("user.name");
+        SingleInstanceLock.exitIfOtherInstancesRunning(appId);
+        System.out.println("main(String[] args) {}");
+        File lock = new File(SystemPath.temporary(), MessageDigestHelper.md5(appId).toLowerCase() +
+                MessageDigestHelper.md5(userName).toLowerCase() + ".lock");
+        System.out.println(lock.delete());
+        try {
+            Thread.sleep(1000 * 5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        main(args);
     }
 
 }

@@ -27,8 +27,6 @@ package com.anyicomplex.desktop.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileLock;
 
 /**
  * Simple utility class that prevents user from running more than one instances of the same application. File-based.
@@ -36,6 +34,8 @@ import java.nio.channels.FileLock;
 public final class SingleInstanceLock {
 
     private SingleInstanceLock(){}
+
+    private volatile static boolean keepLockExists = false;
 
     /**
      * Exit if other current application's instances running, depends on lock file with appId.
@@ -45,33 +45,47 @@ public final class SingleInstanceLock {
      */
     public static synchronized void exitIfOtherInstancesRunning (String appId, int exitCode) {
         if (appId == null) throw new NullPointerException("Unable to create lock: \nappId cannot be null.");
-        String tmpDir = System.getProperty("java.io.tmpdir");
         String userName = System.getProperty("user.name");
-        final File file = new File(tmpDir, appId + "." + userName + ".lock");
-        try {
-            final RandomAccessFile lockFile = new RandomAccessFile(file, "rw");
-            final FileLock fileLock = lockFile.getChannel().tryLock();
-            if (fileLock != null) {
-                Runtime.getRuntime().addShutdownHook(new Thread() {
-                    public void run() {
-                        try {
-                            fileLock.release();
-                            lockFile.close();
-                            boolean success = file.delete();
-                            if (!success) System.err.println("Unable to remove lock: \n" + "Failed to delete lock.");
+        File file = new File(SystemPath.temporary(),
+                MessageDigestHelper.md5(appId).toLowerCase() +
+                MessageDigestHelper.md5(userName).toLowerCase() + ".lock");
+        if (file.exists()) System.exit(exitCode);
+        else {
+            try {
+                if (file.createNewFile()) {
+                    keepLockExists = true;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (keepLockExists) {
+                                if (!file.exists()) {
+                                    try {
+                                        if (!file.createNewFile()) {
+                                            System.err.println("Unable to create lock: \nFailed to create lock file.");
+                                            break;
+                                        }
+                                    } catch (IOException e) {
+                                        System.err.println("Unable to create lock: \n" + e.getMessage());
+                                        break;
+                                    }
+                                }
+                            }
                         }
-                        catch (IOException e) {
-                            System.err.println("Unable to remove lock: \n" + e.getMessage());
+                    }).start();
+                    Runtime.getRuntime().addShutdownHook(new Thread() {
+                        public void run() {
+                            keepLockExists = false;
+                            if (!file.delete()) System.err.println("Unable to remove lock: \n" + "Failed to delete lock file.");
                         }
-                    }
-                });
-                return;
+                    });
+                }
+                else {
+                    System.err.println("Unable to create lock: \nFailed to create lock file.");
+                }
+            } catch (IOException e) {
+                System.err.println("Unable to create lock: \n" + e.getMessage());
             }
         }
-        catch (IOException e) {
-            System.err.println("Unable to create lock: \n" + e.getMessage());
-        }
-        System.exit(exitCode);
     }
 
     /**

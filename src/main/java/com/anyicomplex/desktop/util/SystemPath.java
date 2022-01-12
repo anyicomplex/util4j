@@ -33,18 +33,19 @@ public final class SystemPath {
     private SystemPath(){}
 
     /**
-     * Gets user home dir path.
+     * Gets user home dir path.<br>
+     * Note: Returned path ends without a file separator.
      * @return user home dir path
      */
     public static String userHome() {
         String result = System.getProperty("user.home");
         if (result == null) throw new IllegalStateException("Unable to get user home path: \nUnknown error.");
-        if (result.endsWith(System.getProperty("file.separator"))) result = result.substring(0, result.length() - 1);
-        return result;
+        return PathHelper.removeSeparatorAtEnd(result);
     }
 
     /**
-     * Gets user space application data dir path.
+     * Gets user space application data dir path.<br>
+     * Note: Returned path ends without a file separator.
      * @return user data dir path
      */
     public static String userData() {
@@ -80,7 +81,8 @@ public final class SystemPath {
 
     /**
      * Gets user space application config dir path.<br>
-     * Note: On Windows XP and older Windows, it will return the same path of {@link SystemPath#userData()}.
+     * Note: On Windows XP and older Windows, it will return the same path of {@link SystemPath#userData()}.<br>
+     * Note: Returned path ends without a file separator.
      * @return user config dir path
      */
     public static String userConfig() {
@@ -117,7 +119,8 @@ public final class SystemPath {
 
     /**
      * Gets user space application cache dir path.<br>
-     * Note: On Windows, it will return the same path of {@link SystemPath#userConfig()}.
+     * Note: On Windows, it will return the same path of {@link SystemPath#userConfig()}.<br>
+     * Note: Returned path ends without a file separator.
      * @return user cache dir path
      */
     public static String userCache() {
@@ -153,11 +156,14 @@ public final class SystemPath {
     }
 
     /**
-     * Gets system tmp dir path.
-     * @return system tmp dir path
+     * Gets system temporary dir path.<br>
+     * Note: Returned path ends without a file separator.
+     * @return system temporary dir path
      */
     public static String temporary() {
-        return System.getProperty("java.io.tmpdir");
+        String result = System.getProperty("java.io.tmpdir");
+        if (result == null) throw new IllegalStateException("Unable to get temporary dir path: \nUnknown error.");
+        return PathHelper.removeSeparatorAtEnd(result);
     }
 
 }
